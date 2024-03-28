@@ -1,6 +1,7 @@
 ﻿// Jugador.cs
 using System;
 using System.Collections.Generic;
+using System.Linq; // Para usar .Select()
 
 namespace Chromino
 {
@@ -22,7 +23,8 @@ namespace Chromino
 
         public bool ColocarFichaEnTablero(Ficha ficha, int x, int y, Tablero tablero)
         {
-            return false; // Simulación, implementar lógica real.
+            // Lógica para colocar una ficha en el tablero.
+            return false;
         }
 
         public void SacarFichaDeLaBolsa(List<Ficha> bolsa)
@@ -35,9 +37,12 @@ namespace Chromino
             }
         }
 
-        // Nuevo método para manejar el turno del jugador.
         public void JugarTurno()
         {
+            // Imprimir las fichas del jugador
+            var fichasStr = fichas.Select(f => f.ToString()).Aggregate((acc, f) => acc + ", " + f);
+            Console.WriteLine($"Mis fichas son: {fichasStr}");
+
             if (EsBot)
             {
                 Console.WriteLine("Soy un bot.");

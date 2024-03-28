@@ -12,3 +12,4 @@ C:\Users\Vicente Pareja\Desktop\Universidad\2024\Semetre 1\Diseño detallado\Chr
 C:\Users\Vicente Pareja\Desktop\Universidad\2024\Semetre 1\Diseño detallado\Chromino\Chromino\Chromino\obj\Debug\net8.0\Chromino.pdb
 C:\Users\Vicente Pareja\Desktop\Universidad\2024\Semetre 1\Diseño detallado\Chromino\Chromino\Chromino\obj\Debug\net8.0\Chromino.genruntimeconfig.cache
 C:\Users\Vicente Pareja\Desktop\Universidad\2024\Semetre 1\Diseño detallado\Chromino\Chromino\Chromino\obj\Debug\net8.0\ref\Chromino.dll
+C:\Users\Vicente Pareja\Desktop\Universidad\2024\Semetre 1\Diseño detallado\Chromino\Chromino\Chromino\obj\Debug\net8.0\Chromino.sourcelink.json

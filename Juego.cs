@@ -1,5 +1,4 @@
-﻿//Juego.cs
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +8,7 @@ namespace Chromino
     {
         private Tablero tablero;
         private List<Jugador> jugadores;
+        public Bolsa BolsaDeFichas { get; private set; }
 
         public List<Jugador> Jugadores => jugadores;
 
@@ -16,6 +16,8 @@ namespace Chromino
         {
             tablero = new Tablero();
             jugadores = new List<Jugador>();
+            BolsaDeFichas = new Bolsa(GenerarBolsaDeFichas());
+            BolsaDeFichas.Mezclar(); // Asegura que las fichas estén mezcladas
         }
 
         public void AgregarJugador(Jugador jugador)
@@ -23,50 +25,44 @@ namespace Chromino
             jugadores.Add(jugador);
         }
 
-        // Método estático para generar la bolsa de fichas, incluidas las fichas comodín.
-        public static List<Ficha> GenerarBolsaDeFichas()
+        public static IEnumerable<Ficha> GenerarBolsaDeFichas()
         {
             var colores = new List<string> { "G", "R", "Y", "P", "B" };
             var bolsa = new List<Ficha>();
+            var fichasUnicas = new HashSet<string>();
 
-            // Generar las fichas normales
+            // Generar fichas normales
             foreach (var c1 in colores)
             {
                 foreach (var c2 in colores)
                 {
                     foreach (var c3 in colores)
                     {
-                        // Asegurar que cada combinación de ficha es única
-                        if (!bolsa.Any(f => f.Color1 == c1 && f.Color2 == c2 && f.Color3 == c3))
+                        var ficha = $"{c1}{c2}{c3}";
+                        var fichaInversa = $"{c3}{c2}{c1}";
+
+                        if (!fichasUnicas.Contains(ficha) && !fichasUnicas.Contains(fichaInversa))
                         {
-                            bolsa.Add(new Ficha(c1, c2, c3));
+                            fichasUnicas.Add(ficha);
+                            bolsa.Add(new Ficha(c1, c2, c3, Direccion.N));
                         }
                     }
                 }
             }
 
-            // Agregar las fichas comodín
-            foreach (var c1 in colores)
+            // Agregar comodines específicos
+            var comodinesEspecificos = new List<(string, string, string)>
             {
-                foreach (var c2 in colores)
-                {
-                    // Asegurar que los colores en los extremos sean diferentes
-                    if (c1 != c2)
-                    {
-                        var fichaComodin1 = new Ficha(c1, "C", c2);
-                        var fichaComodin2 = new Ficha(c2, "C", c1);
+                ("G", "C", "R"),
+                ("G", "C", "Y"),
+                ("R", "C", "P"),
+                ("Y", "C", "B"),
+                ("P", "C", "B")
+            };
 
-                        // Añadir fichas comodín si no existen en la bolsa
-                        if (!bolsa.Any(f => f.Color1 == fichaComodin1.Color1 && f.Color2 == fichaComodin1.Color2 && f.Color3 == fichaComodin1.Color3))
-                        {
-                            bolsa.Add(fichaComodin1);
-                        }
-                        if (!bolsa.Any(f => f.Color1 == fichaComodin2.Color1 && f.Color2 == fichaComodin2.Color2 && f.Color3 == fichaComodin2.Color3))
-                        {
-                            bolsa.Add(fichaComodin2);
-                        }
-                    }
-                }
+            foreach (var (c1, c2, c3) in comodinesEspecificos)
+            {
+                bolsa.Add(new Ficha(c1, c2, c3, Direccion.N));
             }
 
             return bolsa;

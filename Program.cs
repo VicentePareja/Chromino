@@ -1,6 +1,4 @@
-﻿// Program.cs
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace Chromino
 {
@@ -9,32 +7,36 @@ namespace Chromino
         static void Main(string[] args)
         {
             var juego = new Juego();
-            var bolsaDeFichas = Juego.GenerarBolsaDeFichas();
 
-            // Inicializar jugadores (Ejemplo con un humano y un bot)
-            var jugadorHumano = new Jugador(false); // false indica que no es bot
-            var jugadorBot = new Jugador(true); // true indica que es bot
+            // Initialize one human player and three bots
+            var jugadorHumano = new Jugador(false); // false indicates not a bot
+            var jugadorBot1 = new Jugador(true);    // true indicates a bot
+            var jugadorBot2 = new Jugador(true);    // another bot
+            var jugadorBot3 = new Jugador(true);    // and another bot
 
             juego.AgregarJugador(jugadorHumano);
-            juego.AgregarJugador(jugadorBot);
+            juego.AgregarJugador(jugadorBot1);
+            juego.AgregarJugador(jugadorBot2);
+            juego.AgregarJugador(jugadorBot3);
 
-            // Distribuir fichas iniciales a los jugadores (simplificado)
-            for (int i = 0; i < 5; i++) // asumiendo 5 fichas iniciales por jugador
+            // Distribute initial fichas to players randomly
+            int fichasPorJugador = 8; // Assuming 8 initial fichas per player
+            for (int i = 0; i < fichasPorJugador; i++)
             {
-                jugadorHumano.AgregarFicha(bolsaDeFichas[i]);
-                jugadorBot.AgregarFicha(bolsaDeFichas[i + 5]);
+                jugadorHumano.AgregarFicha(juego.BolsaDeFichas.SacarFicha());
+                jugadorBot1.AgregarFicha(juego.BolsaDeFichas.SacarFicha());
+                jugadorBot2.AgregarFicha(juego.BolsaDeFichas.SacarFicha());
+                jugadorBot3.AgregarFicha(juego.BolsaDeFichas.SacarFicha());
             }
 
-            bolsaDeFichas.RemoveRange(0, 10); // Remover las fichas ya distribuidas
-
-            // Simulación del loop del juego
+            // Simulate the game loop
             bool partidaTerminada = false;
             while (!partidaTerminada)
             {
                 foreach (var jugador in juego.Jugadores)
                 {
                     jugador.JugarTurno();
-                    // Verificar condiciones de fin de juego aquí
+                    // Check endgame conditions here
                     // partidaTerminada = ...
                 }
             }
