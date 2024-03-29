@@ -25,6 +25,33 @@ namespace Chromino
         {
             jugadores.Add(jugador);
         }
+        
+        public void IniciarTablero()
+        {
+            Ficha comodin = null;
+            // Busca en la bolsa hasta encontrar un comodín.
+            for (int i = 0; i < BolsaDeFichas.fichas.Count; i++)
+            {
+                if (BolsaDeFichas.fichas[i].Color2 == "C")
+                {
+                    comodin = BolsaDeFichas.fichas[i];
+                    BolsaDeFichas.fichas.RemoveAt(i); // Elimina el comodín encontrado de la bolsa.
+                    break; // Sale del ciclo una vez que se encuentra el comodín.
+                }
+            }
+
+            if (comodin != null)
+            {
+                // Coloca el comodín en la casilla (0, 1) con dirección norte.
+                tablero.AgregarFichaForzado(comodin, 0, 1);
+            }
+            else
+            {
+                // Opcional: Manejo de caso donde no se encuentra un comodín.
+                Console.WriteLine("No se encontró un comodín en la bolsa.");
+            }
+        }
+
 
         public static IEnumerable<Ficha> GenerarBolsaDeFichas()
         {

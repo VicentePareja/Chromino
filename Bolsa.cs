@@ -7,7 +7,7 @@ namespace Chromino
 {
     public class Bolsa
     {
-        private List<Ficha> fichas = new List<Ficha>();
+        public List<Ficha> fichas = new List<Ficha>();
         private Random random = new Random();
 
         // Constructor que inicializa la bolsa con una lista opcional de fichas

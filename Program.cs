@@ -18,7 +18,7 @@ namespace Chromino
             //juego.AgregarJugador(jugadorBot1);
             //juego.AgregarJugador(jugadorBot2);
             //juego.AgregarJugador(jugadorBot3);
-
+            juego.IniciarTablero();
             // Distribute initial fichas to players randomly
             int fichasPorJugador = 8; // Assuming 8 initial fichas per player
             for (int i = 0; i < fichasPorJugador; i++)
