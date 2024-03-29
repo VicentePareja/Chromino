@@ -9,20 +9,73 @@ namespace Chromino
     public class Tablero
     {
         private Dictionary<(int, int), Ficha> fichas = new Dictionary<(int, int), Ficha>();
+        // Matriz para marcar la disponibilidad de las casillas. Por simplicidad, vamos a asumir un tamaño fijo grande.
+        // En una implementación real, podrías necesitar una estructura de datos más dinámica o compleja.
+        private Dictionary<(int, int), bool> disponibilidadCasillas = new Dictionary<(int, int), bool>();
 
         public Tablero()
         {
+            InicializarDisponibilidadCasillas();
+        }
+
+        private void InicializarDisponibilidadCasillas()
+        {
+            // Inicializa todas las casillas como disponibles. Ajusta los rangos según sea necesario.
+            for (int i = -100; i <= 100; i++)
+            {
+                for (int j = -100; j <= 100; j++)
+                {
+                    disponibilidadCasillas[(i, j)] = true; // Marca inicialmente todas las casillas como disponibles
+                }
+            }
         }
 
         public bool AgregarFicha(Ficha ficha, int x, int y)
         {
-            if (!fichas.ContainsKey((x, y)))
+            var posiciones = CalcularPosiciones(ficha, x, y);
+            // Primero verifica si la jugada es válida
+            if (posiciones.All(pos => disponibilidadCasillas.ContainsKey(pos) && disponibilidadCasillas[pos]))
             {
+                // Marca las casillas como no disponibles
+                foreach (var posicion in posiciones)
+                {
+                    disponibilidadCasillas[posicion] = false;
+                }
+            
+                // Añade la ficha al tablero
                 fichas.Add((x, y), ficha);
                 ImprimirTablero();
                 return true;
             }
             return false;
+        }
+
+        private List<(int, int)> CalcularPosiciones(Ficha ficha, int x, int y)
+        {
+            var posiciones = new List<(int, int)> { (x, y) }; // Incluye siempre la posición inicial
+
+            // Añade las posiciones adicionales basadas en la dirección de la ficha
+            switch (ficha.Direccion)
+            {
+                case Direccion.N:
+                    posiciones.Add((x, y - 1));
+                    posiciones.Add((x, y - 2));
+                    break;
+                case Direccion.E:
+                    posiciones.Add((x - 1, y));
+                    posiciones.Add((x - 2, y));
+                    break;
+                case Direccion.S:
+                    posiciones.Add((x, y + 1));
+                    posiciones.Add((x, y + 2));
+                    break;
+                case Direccion.O:
+                    posiciones.Add((x + 1, y));
+                    posiciones.Add((x + 2, y));
+                    break;
+            }
+
+            return posiciones;
         }
 
         public void ImprimirTablero()
