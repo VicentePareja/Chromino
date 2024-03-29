@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Juego.cs
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace Chromino
 {
     public class Juego
     {
-        private Tablero tablero;
+        public Tablero tablero;
         private List<Jugador> jugadores;
         public Bolsa BolsaDeFichas { get; private set; }
 

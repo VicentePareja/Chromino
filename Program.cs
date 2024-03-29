@@ -31,13 +31,17 @@ namespace Chromino
 
             // Simulate the game loop
             bool partidaTerminada = false;
+            int contador = 0;
             while (!partidaTerminada)
             {
                 foreach (var jugador in juego.Jugadores)
                 {
-                    jugador.JugarTurno();
-                    // Check endgame conditions here
-                    // partidaTerminada = ...
+                    contador += 1;
+                    jugador.JugarTurno(juego.tablero);
+                    if (contador > 10)
+                    {
+                        partidaTerminada = true;
+                    }
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿namespace Chromino
+﻿// Ficha.cs
+namespace Chromino
 {
     public enum Direccion { N, E, S, O } // O representa Oeste (W en inglés)
 
@@ -7,7 +8,7 @@
         public string Color1 { get; private set; }
         public string Color2 { get; private set; }
         public string Color3 { get; private set; }
-        public Direccion Direccion { get; private set; } // Dirección de la ficha
+        public Direccion Direccion { get; set; } // Dirección de la ficha
 
         public Ficha(string color1, string color2, string color3, Direccion direccion)
         {
