@@ -34,9 +34,7 @@ El proyecto consta de varios archivos principales:
 
 Este proyecto es una base sobre la cual se pueden añadir más características, como:
 
-- Mejorar la inteligencia de los bots.
-- Implementar una interfaz gráfica de usuario (GUI).
-- Añadir soporte para múltiples rondas y puntuación.
+- Arreglar la verificación de una jugada legal (Está mal hecho).
 
 ## Contribuciones
 
