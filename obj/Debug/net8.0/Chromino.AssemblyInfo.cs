@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Chromino")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+22a77439b15278226df8fa65a0cc47a6f07b71a8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+24cc0fc0946424d1e247a2fce9eb987d24f9d13b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Chromino")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Chromino")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -14,6 +14,12 @@ namespace Chromino
             EsBot = esBot;
             fichas = new List<Ficha>();
         }
+        
+        public bool SinFichas()
+        {
+            return fichas.Count == 0;
+        }
+
 
         public void AgregarFicha(Ficha ficha)
         {
@@ -30,60 +36,123 @@ namespace Chromino
             }
         }
 
-        public void JugarTurno(Tablero tablero)
+        public void JugarTurno(Tablero tablero, Bolsa bolsa)
         {
             if (EsBot)
             {
-                Console.WriteLine("Soy un bot jugando mi turno.");
-                // Aquí iría la lógica del bot para jugar su turno.
+                bool jugadaRealizada = false;
+
+                // Intenta colocar cada ficha en el tablero, probando todas las direcciones y posiciones.
+                foreach (Ficha ficha in fichas)
+                {
+                    foreach (Direccion direccion in Enum.GetValues(typeof(Direccion)))
+                    {
+                        ficha.Direccion = direccion; // Establece la dirección de la ficha.
+
+                        // Define el rango de coordenadas a probar en el tablero.
+                        // Este rango debería ajustarse a las dimensiones y límites actuales del tablero.
+                        for (int x = -100; x <= 100; x++)
+                        {
+                            for (int y = -100; y <= 100; y++)
+                            {
+                                if (tablero.JugadaLegal(ficha, x, y) && tablero.AgregarFicha(ficha, x, y))
+                                {
+                                    Console.WriteLine(
+                                        $"Bot ha colocado una ficha en ({x}, {y}) con dirección {direccion}.");
+                                    fichas.Remove(ficha); // Remueve la ficha de la mano del bot.
+                                    jugadaRealizada = true;
+                                    break;
+                                }
+                            }
+
+                            if (jugadaRealizada) break;
+                        }
+
+                        if (jugadaRealizada) break;
+                    }
+
+                    if (jugadaRealizada) break;
+                }
+
+                if (!jugadaRealizada)
+                {
+                    Console.WriteLine("No había jugadas posibles.");
+                }
             }
             else
             {
-                Console.WriteLine("Es tu turno, introduce algo: ");
-                Console.WriteLine("Tienes las siguientes fichas:");
-                for (int i = 0; i < fichas.Count; i++)
+                bool jugadaRealizada = false;
+                while (!jugadaRealizada)
                 {
-                    Console.WriteLine($"{i + 1}: {fichas[i]}");
-                }
+                    Console.WriteLine("Es tu turno, introduce algo: ");
+                    Console.WriteLine("Tienes las siguientes fichas:");
+                    for (int i = 0; i < fichas.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}: {fichas[i]}");
+                    }
 
-                Console.WriteLine("Selecciona una ficha por número: ");
-                int indiceFicha = int.Parse(Console.ReadLine()) - 1;
-                
-                Console.WriteLine("Introduce coordenada X: ");
-                int x = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Selecciona una ficha por número (-1 para pasar): ");
+                    int eleccion = int.Parse(Console.ReadLine());
 
-                Console.WriteLine("Introduce coordenada Y: ");
-                int y = int.Parse(Console.ReadLine());
+                    if (eleccion == -1)
+                    {
+                        AgregarFicha((bolsa.SacarFicha()));
+                        Console.WriteLine("Has pasado tu turno y tomado una nueva ficha de la bolsa.");
+                        jugadaRealizada = true;
+                    }
+                    else
+                    {
+                        int indiceFicha = eleccion - 1;
 
-                Console.WriteLine("Introduce la dirección (N, E, S, O): ");
-                var direccion = Console.ReadLine().ToUpper();
-                Direccion dirEnum = Direccion.N; // Default value
-                switch (direccion)
-                {
-                    case "N":
-                        dirEnum = Direccion.N;
-                        break;
-                    case "E":
-                        dirEnum = Direccion.E;
-                        break;
-                    case "S":
-                        dirEnum = Direccion.S;
-                        break;
-                    case "O":
-                        dirEnum = Direccion.O;
-                        break;
-                }
-                Ficha fichaSeleccionada = fichas[indiceFicha];
-                fichaSeleccionada.Direccion = dirEnum; // Asumiendo que la ficha tiene una propiedad de Dirección que puedes establecer.
-                
-                if (!tablero.AgregarFicha(fichaSeleccionada, x, y))
-                {
-                    Console.WriteLine("No se pudo colocar la ficha.");
-                }
-                else
-                {
-                    fichas.RemoveAt(indiceFicha); // Remueve la ficha de la lista del jugador si se coloca exitosamente.
-                    Console.WriteLine("Ficha colocada exitosamente.");
+                        Console.WriteLine("Introduce coordenada X: ");
+                        int x = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Introduce coordenada Y: ");
+                        int y = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Introduce la dirección (N, E, S, O): ");
+                        var direccion = Console.ReadLine().ToUpper();
+                        Direccion dirEnum = Direccion.N; // Valor predeterminado.
+                        switch (direccion)
+                        {
+                            case "N":
+                                dirEnum = Direccion.N;
+                                break;
+                            case "E":
+                                dirEnum = Direccion.E;
+                                break;
+                            case "S":
+                                dirEnum = Direccion.S;
+                                break;
+                            case "O":
+                                dirEnum = Direccion.O;
+                                break;
+                        }
+
+                        if (indiceFicha >= 0 && indiceFicha < fichas.Count)
+                        {
+                            Ficha fichaSeleccionada = fichas[indiceFicha];
+                            fichaSeleccionada
+                                .CambiarDireccion(
+                                    dirEnum); // Asumiendo que este método ajusta la dirección correctamente.
+
+                            if (tablero.AgregarFicha(fichaSeleccionada, x, y))
+                            {
+                                Console.WriteLine("Ficha colocada exitosamente.");
+                                fichas.RemoveAt(
+                                    indiceFicha); // Remueve la ficha de la lista del jugador si se coloca exitosamente.
+                                jugadaRealizada = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Jugada inválida, intenta de nuevo.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Selección inválida, intenta de nuevo.");
+                        }
+                    }
                 }
             }
         }

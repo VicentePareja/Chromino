@@ -81,58 +81,70 @@ namespace Chromino
         }
 
         public bool JugadaLegal(Ficha ficha, int x, int y)
+{
+    var posicionesFicha = CalcularPosiciones(ficha, x, y);
+
+    int coincidencias = 0;
+
+    // Verificar adyacencias y coincidencias de color para C1.
+    foreach (var pos in CasillasAdyacentesC1(x, y, ficha.Direccion))
+    {
+        if (casillasConColor.TryGetValue(pos, out string color))
         {
-            var posicionesFicha = CalcularPosiciones(ficha, x, y);
-
-            // La disponibilidad de las casillas ya no se verifica aquí porque asumimos
-            // que este método se enfoca en la legalidad de la jugada en términos de colores adyacentes.
-
-            int coincidencias = 0;
-
-            // Verificar adyacencias y coincidencias de color para C1.
-            foreach (var pos in CasillasAdyacentesC1(x, y, ficha.Direccion))
+            if (color != ficha.Color1 && color != "C")
             {
-                if (casillasConColor.TryGetValue(pos, out string color))
-                {
-                    if (color == ficha.Color1 || color == "C")
-                    {
-                        coincidencias++;
-                    }
-                    // No se retorna falso si se encuentra un comodín.
-                }
+                // Retorna falso si se encuentra un color diferente que no es un comodín.
+                return false;
             }
-
-            var posC2 = posicionesFicha[1];
-            var posC3 = posicionesFicha[2];
-
-            // Verificar adyacencias y coincidencias de color para C2.
-            foreach (var pos in CasillasAdyacentesC2(posC2.Item1, posC2.Item2, ficha.Direccion))
+            if (color == ficha.Color1 || color == "C")
             {
-                if (casillasConColor.TryGetValue(pos, out string color))
-                {
-                    if (color == ficha.Color2 || color == "C")
-                    {
-                        coincidencias++;
-                    }
-                }
+                coincidencias++;
             }
-
-            // Verificar adyacencias y coincidencias de color para C3.
-            foreach (var pos in CasillasAdyacentesC3(posC3.Item1, posC3.Item2, ficha.Direccion))
-            {
-                if (casillasConColor.TryGetValue(pos, out string color))
-                {
-                    if (color == ficha.Color3 || color == "C")
-                    {
-                        coincidencias++;
-                    }
-                }
-            }
-
-            // La jugada es legal si hay al menos dos coincidencias de color,
-            // incluyendo comodines como coincidencias válidas.
-            return coincidencias >= 2;
         }
+    }
+
+    var posC2 = posicionesFicha[1];
+    var posC3 = posicionesFicha[2];
+
+    // Verificar adyacencias y coincidencias de color para C2.
+    foreach (var pos in CasillasAdyacentesC2(posC2.Item1, posC2.Item2, ficha.Direccion))
+    {
+        if (casillasConColor.TryGetValue(pos, out string color))
+        {
+            if (color != ficha.Color2 && color != "C")
+            {
+                // Retorna falso si se encuentra un color diferente que no es un comodín.
+                return false;
+            }
+            if (color == ficha.Color2 || color == "C")
+            {
+                coincidencias++;
+            }
+        }
+    }
+
+    // Verificar adyacencias y coincidencias de color para C3.
+    foreach (var pos in CasillasAdyacentesC3(posC3.Item1, posC3.Item2, ficha.Direccion))
+    {
+        if (casillasConColor.TryGetValue(pos, out string color))
+        {
+            if (color != ficha.Color3 && color != "C")
+            {
+                // Retorna falso si se encuentra un color diferente que no es un comodín.
+                return false;
+            }
+            if (color == ficha.Color3 || color == "C")
+            {
+                coincidencias++;
+            }
+        }
+    }
+
+    // La jugada es legal si hay al menos dos coincidencias de color,
+    // incluyendo comodines como coincidencias válidas.
+    return coincidencias >= 2;
+}
+
 
 
         public bool AgregarFicha(Ficha ficha, int x, int y)
